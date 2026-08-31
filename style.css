@@ -49,16 +49,22 @@
   @media (max-width:700px){ .wrap{padding:0 20px;} }
 
   /* ---------- NAV ---------- */
-  /* Selector de CLASE, no de elemento. Con `nav{position:fixed}` la
-     navegacion prev/next de las paginas de proyecto (que tambien es un
-     <nav>) heredaba position:fixed y se pegaba arriba tapando el menu. */
+  /* Dos selectores a proposito:
+     - `body > nav` alcanza el menu del header aunque el HTML sea una version
+       vieja sin la clase (cache del navegador, subida parcial, CDN).
+     - `.site-nav` es el selector correcto de aqui en adelante.
+     Lo que NO puede usarse es un `nav{...}` suelto: la navegacion prev/next
+     de las paginas de proyecto tambien es un <nav>, y heredaba position:fixed,
+     se pegaba arriba, tapaba el menu e interceptaba todos los clics.
+     La clave es `body >`: el prev/next vive dentro de <main>, nunca lo toca. */
+  body > nav,
   .site-nav{
     position:fixed; top:0; left:0; right:0; z-index:100;
     display:flex; justify-content:space-between; align-items:center;
     padding:22px 32px;
     mix-blend-mode:difference;
   }
-  @media (max-width:700px){ .site-nav{padding:18px 20px;} }
+  @media (max-width:700px){ body > nav, .site-nav{padding:18px 20px;} }
   .nav-mark{
     font-family:var(--font-display);
     font-weight:700; font-size:15px; letter-spacing:1px; text-transform:uppercase;
