@@ -56,3 +56,13 @@ Hoy solo Honda lo tiene. Los otros seis siguen con la descripcion generica origi
 Regla de honestidad para los textos: si hiciste la visualizacion y no el diseño, el texto no puede decir "designed as" ni "designed to". Se escribe desde el encargo y desde lo que las imagenes tenian que resolver. Los creditos van en `.p-credits`.
 
 `.p-meta` usa `auto-fit`, asi que acepta 4, 6 u 8 datos sin dejar huecos.
+
+## Cuidado con los selectores de elemento
+
+El menu del header usa `.site-nav`, NO `nav`. Motivo: la navegacion prev/next
+de las paginas de proyecto tambien es un `<nav>`, y con una regla de elemento
+`nav{position:fixed; top:0; z-index:100}` la heredaba, se pegaba arriba, tapaba
+el menu real e interceptaba todos los clics de la pagina.
+
+Si agregas estilos de layout, usa clases. Un selector de elemento sobre `nav`,
+`section`, `main` o `footer` va a alcanzar cosas que no esperas.
