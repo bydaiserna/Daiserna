@@ -50,10 +50,13 @@
     }
   }
 
-  /* Los del hero se excluyen: estan en position:absolute cubriendo todo el
+  /* Las tarjetas y los reels llevan src real + preload="none": el navegador
+     no descarga nada hasta que se le da play, pero SI pinta el poster.
+     Con data-src y sin src, Safari de iPhone dejaba la miniatura en negro.
+     Los del hero se excluyen: estan en position:absolute cubriendo todo el
      viewport, asi que el observer los daria por visibles y cargaria los 4 de
      una (~2 MB). El carrusel de mas abajo los maneja aparte. */
-  var lazyVideos = document.querySelectorAll('video[data-src]:not(.hero-video)');
+  var lazyVideos = document.querySelectorAll('video:not(.hero-video)');
 
   if (canObserve) {
     /* Descarga anticipada: 300px antes de que se vea */

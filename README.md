@@ -12,7 +12,7 @@ script.js           Reveal al scroll, carrusel del hero, carga de video bajo dem
 work/*.html         Una pagina por proyecto (7)
 img/                Imagenes a resolucion completa
 img/800/            Variantes de 800px para movil (srcset)
-video/              Clips MP4
+video/              Clips MP4 (sin pista de audio: los videos van muted)
 favicon.svg         Monograma DS
 robots.txt          
 sitemap.xml         Actualizar la fecha lastmod al publicar cambios grandes
@@ -66,3 +66,39 @@ el menu real e interceptaba todos los clics de la pagina.
 
 Si agregas estilos de layout, usa clases. Un selector de elemento sobre `nav`,
 `section`, `main` o `footer` va a alcanzar cosas que no esperas.
+
+
+## Videos del G-08
+
+El hero es `video/gate08-hero.mp4`, 1600x900 CRF 29, y se usa en tres sitios:
+el carrusel del hero del home, la tarjeta del grid, y la pagina del proyecto.
+Si lo reemplazas, regenera tambien su poster `img/hero_gate08.webp` y la
+variante `img/800/hero_gate08.webp`, o el poster va a mostrar el render viejo.
+
+Los breakdowns `gate08-modelling.mp4` y `gate08-texturing.mp4` van a 1440 de
+ancho CRF 29, mas resolucion que el resto porque tienen texto de interfaz de
+Blender que conviene que se lea.
+
+Comando usado para comprimir:
+
+    ffmpeg -i ORIGINAL.mp4 -vf "scale=1600:-2" -c:v libx264 -crf 29 \
+           -preset slow -profile:v high -pix_fmt yuv420p \
+           -movflags +faststart -an SALIDA.mp4
+
+El `-an` quita el audio. Todos los videos del sitio van `muted`, asi que la
+pista de audio solo suma peso.
+
+## Miniaturas: dos cosas que NO hay que volver a hacer
+
+1. **Nada de `position:absolute` en `.project-media img/video`.** En Safari de
+   iPhone un hijo absoluto dentro de un contenedor dimensionado solo por
+   `aspect-ratio` puede resolver a altura cero y la miniatura no se pinta.
+   `.project-media` ya es un item de grid que se estira solo, asi que con
+   `height:100%` en la imagen basta, y funciona igual en escritorio y en movil.
+2. **Los `<video>` de las tarjetas y los reels llevan `src` real, no
+   `data-src`.** Con `preload="none"` el navegador no descarga nada hasta que
+   se le da play, pero SI pinta el poster. Sin `src`, iOS deja el recuadro en
+   negro. Solo los cuatro del hero usan `data-src`, porque el carrusel los
+   maneja aparte y estan invisibles hasta que les toca.
+
+Al tocar el grid, probar SIEMPRE a 390px de ancho, no solo en escritorio.

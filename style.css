@@ -221,16 +221,24 @@
     .project.reverse .project-media{order:1;}
     .project.reverse .project-info{order:2;}
   }
-  /* FIX: el aspect-ratio fijo hacia que el media quedara mas corto que la
-     columna de texto y aparecieran bandas negras (hasta 81px en Honda). */
+  /* La columna de media tiene que estirarse a la altura de la fila en
+     escritorio (si no, quedan bandas negras: Honda llegaba a 81px), pero SIN
+     usar position:absolute en la imagen.
+     Motivo: en Safari de iPhone un hijo absoluto dentro de un contenedor
+     dimensionado solo por aspect-ratio puede resolver a altura cero, y la
+     miniatura no se pinta. Como .project-media es un item de grid, ya se
+     estira solo, asi que height:100% en la imagen basta y sobra. */
   .project-media{
     position:relative; overflow:hidden; background:#000;
     min-height:340px;
   }
-  @media (max-width:860px){ .project-media{min-height:0; aspect-ratio:16/10;} }
+  @media (max-width:860px){
+    /* min-height ademas de aspect-ratio: es un piso, para que la caja no
+       pueda colapsar aunque aspect-ratio falle en algun navegador viejo. */
+    .project-media{min-height:210px; aspect-ratio:16/10;}
+  }
   .project-media img, .project-media video{
-    position:absolute; inset:0;
-    width:100%; height:100%; object-fit:cover;
+    display:block; width:100%; height:100%; object-fit:cover;
     transform:scale(1.03); transition:transform .7s cubic-bezier(.16,1,.3,1), filter .5s;
     filter:grayscale(25%) brightness(0.92);
   }
